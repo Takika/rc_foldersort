@@ -22,6 +22,12 @@ class rc_foldersort extends rcube_plugin
 
         if ($this->rc->task == 'settings') {
             $this->add_hook('folder_form', array($this, 'folder_form_hook'));
+            $this->add_hook('folder_update', array($this, 'folder_update_hook'));
+        }
+
+        if ($this->rc->task == 'mail') {
+            $this->include_script('rc_foldersort.js');
+            $this->register_action('plugin.rc_foldersort_json', array($this, 'sort_json_action'));
         }
     }
 
@@ -93,6 +99,25 @@ class rc_foldersort extends rcube_plugin
 
         $this->_debug($args, 'folder_form output', true);
         return $args;
+    }
+
+    public function folder_update_hook($args)
+    {
+        $settings = $args['record']['settings'];
+        $this->_debug($settings, 'folder_update settings', true);
+
+        $sort_order = $settings['sort_column'] . '_' . $settings['sort_order'];
+        $cfg_sort = $this->sort_order;
+        $cfg_sort[$mbox] = $sort_order;
+        $this->sort_order = $cfg_sort;
+        $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
+        $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+
+        return $args;
+    }
+
+    public function sort_json_action($args)
+    {
     }
 
     private function _debug($value, $key = '', $force = false)
