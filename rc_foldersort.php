@@ -67,7 +67,7 @@ class rc_foldersort extends rcube_plugin
                 $str = sprintf("[%s] %s", $this->uname, $str);
             }
 
-            write_log('iwd_mail', $str);
+            write_log($this->ID, $str);
         }
     }
 
