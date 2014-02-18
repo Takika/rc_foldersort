@@ -9,16 +9,11 @@ class rc_foldersort extends rcube_plugin
     private $rc;
     private $sort_order;
 
-    private $uname;
-    private $debug = false;
-
     public function init()
     {
         $this->rc         = rcube::get_instance();
         $this->sort_order = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
         $this->rc->output->set_env('per_folder_sort', $this->sort_order);
-
-        $this->uname = $this->rc->user->get_username();
 
         if ($this->rc->task == 'settings') {
             $this->add_hook('folder_form', array($this, 'folder_form_hook'));
@@ -103,14 +98,13 @@ class rc_foldersort extends rcube_plugin
 
     public function folder_update_hook($args)
     {
-        $mbox     = $args['record']['name'];
-        $settings = $args['record']['settings'];
-        $this->_debug($settings, 'folder_update settings', true);
-
-        $sort_order = $settings['sort_column'] . '_' . $settings['sort_order'];
-        $cfg_sort = $this->sort_order;
-        $cfg_sort[$mbox] = $sort_order;
+        $mbox             = $args['record']['name'];
+        $settings         = $args['record']['settings'];
+        $sort_order       = $settings['sort_column'] . '_' . $settings['sort_order'];
+        $cfg_sort         = $this->sort_order;
+        $cfg_sort[$mbox]  = $sort_order;
         $this->sort_order = $cfg_sort;
+
         $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
         $this->rc->output->set_env('per_folder_sort', $this->sort_order);
 
@@ -119,16 +113,16 @@ class rc_foldersort extends rcube_plugin
 
     public function sort_json_action($args)
     {
-        $this->_debug($_POST, 'sort_json_action POST', true);
-        $cmd = get_input_value('cmd', RCUBE_INPUT_POST);
+        $cmd    = get_input_value('cmd', RCUBE_INPUT_POST);
         $folder = get_input_value('folder', RCUBE_INPUT_POST);
-        $col = get_input_value('col', RCUBE_INPUT_POST);
-        $order = get_input_value('order', RCUBE_INPUT_POST);
+        $col    = get_input_value('col', RCUBE_INPUT_POST);
+        $order  = get_input_value('order', RCUBE_INPUT_POST);
 
         if ($cmd == 'save_order') {
-            $sort_order = $this->sort_order;
+            $sort_order          = $this->sort_order;
             $sort_order[$folder] = $col . "_" . $order;
-            $this->sort_order = $sort_order;
+            $this->sort_order    = $sort_order;
+
             $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
             $this->rc->output->set_env('per_folder_sort', $this->sort_order);
         }
@@ -141,42 +135,5 @@ class rc_foldersort extends rcube_plugin
 
         return $args;
     }
-
-    private function _debug($value, $key = '', $force = false)
-    {
-        if ($this->debug || $force) {
-            $trace           = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
-            $caller_trace    = $trace[0];
-            $caller_function = $trace[1]['function'];
-            $caller_line     = $caller_trace['line'];
-            $caller_file     = $caller_trace['file'];
-            $caller_file     = preg_replace("|.*/|", "", $caller_file);
-            $str             = sprintf("[%s:%d - %s] ", $caller_file, $caller_line, $caller_function);
-
-            $val_type = gettype($value);
-
-            switch ($val_type) {
-                case "object": {
-                    $old_value = $value;
-                    $value     = get_class($old_value);
-                    $str      .= $key . ' type = ' . $value;
-                    break;
-                }
-                default: {
-                    $old_value = $value;
-                    $value     = var_export($old_value, true);
-                    $str      .= $key. ' = ' .$value;
-                    break;
-                }
-            }
-
-            if ($this->uname) {
-                $str = sprintf("[%s] %s", $this->uname, $str);
-            }
-
-            write_log($this->ID, $str);
-        }
-    }
-
 }
 ?>
