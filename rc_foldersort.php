@@ -168,7 +168,7 @@ class rc_foldersort extends rcube_plugin
             $folder_sorts                     = $this->sort_order;
             $folder_sorts['default']          = $folder_sort;
             $this->sort_order                 = $folder_sorts;
-            $args['prefs']['iwd_folder_sort'] = $this->sort_order;
+            $args['prefs']['per_folder_sort'] = $this->sort_order;
         }
 
         return $args;
