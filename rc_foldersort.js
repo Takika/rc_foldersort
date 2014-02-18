@@ -4,11 +4,11 @@ function sort_list(props)
     col = rcmail.env.sort_col;
     order = rcmail.env.sort_order=='ASC' ? 'DESC' : 'ASC';
 
-    if (rcmail.env.iwd_sort_order) {
-        if (rcmail.env.iwd_sort_order[props]) {
-            folder_sort = rcmail.env.iwd_sort_order[props];
-        } else if (rcmail.env.iwd_sort_order['default']) {
-            folder_sort = rcmail.env.iwd_sort_order['default'];
+    if (rcmail.env.per_folder_sort) {
+        if (rcmail.env.per_folder_sort[props]) {
+            folder_sort = rcmail.env.per_folder_sort[props];
+        } else if (rcmail.env.per_folder_sort['default']) {
+            folder_sort = rcmail.env.per_folder_sort['default'];
         } else {
             folder_sort = col + '_' + order;
         }
