@@ -102,6 +102,7 @@ class rc_foldersort extends rcube_plugin
 
     public function folder_update_hook($args)
     {
+        $mbox     = $args['record']['name'];
         $settings = $args['record']['settings'];
         $this->_debug($settings, 'folder_update settings', true);
 
