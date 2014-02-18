@@ -18,6 +18,8 @@ class rc_foldersort extends rcube_plugin
         if ($this->rc->task == 'settings') {
             $this->add_hook('folder_form', array($this, 'folder_form_hook'));
             $this->add_hook('folder_update', array($this, 'folder_update_hook'));
+            $this->add_hook('preferences_list', array($this, 'preferences_list_hook'));
+            $this->add_hook('preferences_save', array($this, 'preferences_save_hook'));
         }
 
         if ($this->rc->task == 'mail') {
@@ -107,6 +109,67 @@ class rc_foldersort extends rcube_plugin
 
         $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
         $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+
+        return $args;
+    }
+
+    public function preferences_list_hook($args)
+    {
+        if ($args['section'] == 'mailbox') {
+            $cols = array(
+                'from',
+                'to',
+                'subject',
+                'date',
+                'size',
+            );
+
+            $folder_sorts = $this->sort_order;
+            if (array_key_exists('default', $folder_sorts)) {
+                $folder_sort = $folder_sorts['default'];
+            } else {
+                $folder_sort = 'date_DESC';
+            }
+
+            list($col, $order) = explode('_', $folder_sort);
+            if ($order != 'DESC' && $order != 'ASC') {
+                $order = 'DESC';
+            }
+
+            if (!in_array($col, $cols)) {
+                $col = 'date';
+            }
+
+            $sort_select_col = new html_select(array('name' => '_default_sort_col', 'id' => '_default_sort_col'));
+            foreach ($cols as $temp_col) {
+                $sort_select_col->add(rcube_label($temp_col), $temp_col);
+            }
+
+            $sort_select_order = new html_select(array('name' => '_default_sort_order', 'id' => '_default_sort_order'));
+            $sort_select_order->add(rcube_label('asc'), 'ASC');
+            $sort_select_order->add(rcube_label('desc'), 'DESC');
+            $sort_options = array(
+                'title' => rcube_label('listorder'),
+                'content' => $sort_select_col->show($col) . $sort_select_order->show($order),
+            );
+
+            $args['blocks']['main']['options']['listorder'] = $sort_options;
+        }
+
+        return $args;
+    }
+
+    public function preferences_save_hook($args)
+    {
+        if ($args['section'] == 'mailbox') {
+            $folder_sort_col                  = get_input_value('_default_sort_col', RCUBE_INPUT_POST);
+            $folder_sort_order                = get_input_value('_default_sort_order', RCUBE_INPUT_POST);
+            $folder_sort                      = $folder_sort_col . '_' . $folder_sort_order;
+            $folder_sorts                     = $this->sort_order;
+            $folder_sorts['default']          = $folder_sort;
+            $this->sort_order                 = $folder_sorts;
+            $args['prefs']['iwd_folder_sort'] = $this->sort_order;
+        }
 
         return $args;
     }
