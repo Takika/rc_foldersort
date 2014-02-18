@@ -31,6 +31,66 @@ class rc_foldersort extends rcube_plugin
         $options = $args['options'];
         $mbox    = $options['name'];
 
+        $cols = array(
+            'from',
+            'to',
+            'subject',
+            'date',
+            'size',
+        );
+
+        $folder_sorts = $this->sort_order;
+        if (array_key_exists($mbox, $folder_sorts)) {
+            $folder_sort = $folder_sorts[$mbox];
+        } else if (array_key_exists('default', $folder_sorts)) {
+            $folder_sort = $folder_sorts['default'];
+        } else {
+            $folder_sort = 'date_DESC';
+        }
+
+        list($col, $order) = explode('_', $folder_sort);
+        if ($order != 'DESC' && $order != 'ASC') {
+            $order = 'DESC';
+        }
+
+        if (!in_array($col, $cols)) {
+            $col = 'date';
+        }
+
+        if (is_array($content) && !array_key_exists('_sortcol', $content)) {
+            $folder_sort_col_select = new html_select(array('name' => '_sortcol', 'id' => '_sortcol'));
+            foreach ($cols as $temp_col) {
+                $folder_sort_col_select->add(rcube_label($temp_col), $temp_col);
+            }
+
+            $content['_sortcol'] = array(
+                'label' => rcube_label('listsorting'),
+                'value' => $folder_sort_col_select->show($col),
+            );
+        }
+
+        if (is_array($content) && !array_key_exists('_sortcol', $options)) {
+            $options['_sortcol'] = $col;
+        }
+
+        if (is_array($content) && !array_key_exists('_sortord', $content)) {
+            $folder_sort_order_select = new html_select(array('name' => '_sortord', 'id' => '_sortord'));
+            $folder_sort_order_select->add(rcube_label('asc'), 'ASC');
+            $folder_sort_order_select->add(rcube_label('desc'), 'DESC');
+            $content['_sortord'] = array(
+                'label' => rcube_label('listorder'),
+                'value' => $folder_sort_order_select->show($order),
+            );
+        }
+
+        if (is_array($content) && !array_key_exists('_sortord', $options)) {
+            $options['_sortord'] = $order;
+        }
+
+        $args['form']['props']['fieldsets']['settings']['content'] = $content;
+
+        $args['options'] = $options;
+
         $this->_debug($args, 'folder_form output', true);
         return $args;
     }
