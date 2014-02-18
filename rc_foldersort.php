@@ -97,7 +97,6 @@ class rc_foldersort extends rcube_plugin
 
         $args['options'] = $options;
 
-        $this->_debug($args, 'folder_form output', true);
         return $args;
     }
 
