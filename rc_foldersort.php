@@ -7,7 +7,6 @@ class rc_foldersort extends rcube_plugin
     public $task = 'mail|settings';
 
     private $rc;
-    private $sort_order;
 
     private $uname;
     private $debug;
@@ -16,8 +15,8 @@ class rc_foldersort extends rcube_plugin
     {
         $this->rc         = rcube::get_instance();
         $this->uname      = $this->rc->user->get_username();
-        $this->sort_order = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
-        $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+        $sort_order       = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
+        $this->rc->output->set_env('per_folder_sort', $sort_order);
 
         if ($this->rc->task == 'settings') {
             $this->add_hook('folder_form', array($this, 'folder_form_hook'));
@@ -47,7 +46,7 @@ class rc_foldersort extends rcube_plugin
             'size',
         );
 
-        $folder_sorts = $this->sort_order;
+        $folder_sorts = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
         if (array_key_exists($mbox, $folder_sorts)) {
             $folder_sort = $folder_sorts[$mbox];
         } else if (array_key_exists('default', $folder_sorts)) {
@@ -107,12 +106,11 @@ class rc_foldersort extends rcube_plugin
         $mbox             = $args['record']['name'];
         $settings         = $args['record']['settings'];
         $sort_order       = $settings['sort_column'] . '_' . $settings['sort_order'];
-        $cfg_sort         = $this->sort_order;
+        $cfg_sort         = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
         $cfg_sort[$mbox]  = $sort_order;
-        $this->sort_order = $cfg_sort;
 
-        $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
-        $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+        $this->rc->user->save_prefs(array('per_folder_sort' => $cfg_sort));
+        $this->rc->output->set_env('per_folder_sort', $cfg_sort);
 
         return $args;
     }
@@ -128,7 +126,7 @@ class rc_foldersort extends rcube_plugin
                 'size',
             );
 
-            $folder_sorts = $this->sort_order;
+            $folder_sorts = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
             if (array_key_exists('default', $folder_sorts)) {
                 $folder_sort = $folder_sorts['default'];
             } else {
@@ -169,10 +167,9 @@ class rc_foldersort extends rcube_plugin
             $folder_sort_col                  = get_input_value('_default_sort_col', RCUBE_INPUT_POST);
             $folder_sort_order                = get_input_value('_default_sort_order', RCUBE_INPUT_POST);
             $folder_sort                      = $folder_sort_col . '_' . $folder_sort_order;
-            $folder_sorts                     = $this->sort_order;
+            $folder_sorts                     = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
             $folder_sorts['default']          = $folder_sort;
-            $this->sort_order                 = $folder_sorts;
-            $args['prefs']['per_folder_sort'] = $this->sort_order;
+            $args['prefs']['per_folder_sort'] = $folder_sorts;
         }
 
         return $args;
@@ -186,12 +183,11 @@ class rc_foldersort extends rcube_plugin
         $order  = get_input_value('order', RCUBE_INPUT_POST);
 
         if ($cmd == 'save_order') {
-            $sort_order          = $this->sort_order;
+            $sort_order          = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
             $sort_order[$folder] = $col . "_" . $order;
-            $this->sort_order    = $sort_order;
 
-            $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
-            $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+            $this->rc->user->save_prefs(array('per_folder_sort' => $sort_order));
+            $this->rc->output->set_env('per_folder_sort', $sort_order);
         }
     }
 
@@ -235,7 +231,7 @@ class rc_foldersort extends rcube_plugin
                 $str = sprintf("[%s] %s", $this->uname, $str);
             }
 
-            write_log('iwd_mail', $str);
+            write_log($this->ID, $str);
         }
     }
 
