@@ -18,7 +18,6 @@ class rc_foldersort extends rcube_plugin
         $this->uname      = $this->rc->user->get_username();
         $userprefs        = $this->rc->user->get_prefs();
         $this->sort_order = $userprefs['per_folder_sort'];
-        $this->_debug($this->sort_order, 'init sort_order', true);
         $this->rc->output->set_env('per_folder_sort', $this->sort_order);
 
         if ($this->rc->task == 'settings') {
