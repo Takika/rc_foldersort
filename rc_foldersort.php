@@ -7,6 +7,7 @@ class rc_foldersort extends rcube_plugin
     public $task = 'mail|settings';
 
     private $rc;
+    private $sort_order;
 
     private $uname;
     private $debug;
@@ -15,7 +16,9 @@ class rc_foldersort extends rcube_plugin
     {
         $this->rc         = rcube::get_instance();
         $this->uname      = $this->rc->user->get_username();
-        $sort_order       = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
+        $userprefs        = $this->rc->user->get_prefs();
+        $this->sort_order = $userprefs['per_folder_sort'];
+        $this->_debug($this->sort_order, 'init sort_order', true);
         $this->rc->output->set_env('per_folder_sort', $sort_order);
 
         if ($this->rc->task == 'settings') {
