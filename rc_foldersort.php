@@ -9,9 +9,13 @@ class rc_foldersort extends rcube_plugin
     private $rc;
     private $sort_order;
 
+    private $uname;
+    private $debug;
+
     public function init()
     {
         $this->rc         = rcube::get_instance();
+        $this->uname      = $this->rc->user->get_username();
         $this->sort_order = $this->rc->config->get('per_folder_sort', array('default' => 'date_DESC'));
         $this->rc->output->set_env('per_folder_sort', $this->sort_order);
 
@@ -174,7 +178,7 @@ class rc_foldersort extends rcube_plugin
         return $args;
     }
 
-    public function sort_json_action($args)
+    public function sort_json_action()
     {
         $cmd    = get_input_value('cmd', RCUBE_INPUT_POST);
         $folder = get_input_value('folder', RCUBE_INPUT_POST);
@@ -198,5 +202,42 @@ class rc_foldersort extends rcube_plugin
 
         return $args;
     }
+
+    private function _debug($value, $key = '', $force = false)
+    {
+        if ($this->debug || $force) {
+            $trace           = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+            $caller_trace    = $trace[0];
+            $caller_function = $trace[1]['function'];
+            $caller_line     = $caller_trace['line'];
+            $caller_file     = $caller_trace['file'];
+            $caller_file     = preg_replace("|.*/|", "", $caller_file);
+            $str             = sprintf("[%s:%d - %s] ", $caller_file, $caller_line, $caller_function);
+
+            $val_type = gettype($value);
+
+            switch ($val_type) {
+                case "object": {
+                    $old_value = $value;
+                    $value     = get_class($old_value);
+                    $str      .= $key . ' type = ' . $value;
+                    break;
+                }
+                default: {
+                    $old_value = $value;
+                    $value     = var_export($old_value, true);
+                    $str      .= $key. ' = ' .$value;
+                    break;
+                }
+            }
+
+            if ($this->uname) {
+                $str = sprintf("[%s] %s", $this->uname, $str);
+            }
+
+            write_log('iwd_mail', $str);
+        }
+    }
+
 }
 ?>
