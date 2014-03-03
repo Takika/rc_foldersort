@@ -66,3 +66,7 @@ rcmail.addEventListener('init', function() {
 	rcmail.register_command('plugin.rc_foldersort.sort_header', 'sort_header');
 	rcmail.enable_command('plugin.rc_foldersort.sort_header', true);
 });
+
+rcmail.addEventListener('responsebefore', function(resp) {
+    console.log('responsebefore resp: ' + response);
+});
