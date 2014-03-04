@@ -68,7 +68,29 @@ rcmail.addEventListener('init', function() {
 });
 
 rcmail.addEventListener('beforelist', function(folder) {
-    console.log('beforelist folder: ' + folder);
+    if (folder && rcmail.task == 'mail') {
+        var folder_sort;
+        col = rcmail.env.sort_col;
+        order = rcmail.env.sort_order;
+        console.log('beforelist before folder: ' + folder + ', col: ' + col + ', order: ' + order);
+
+        if (rcmail.env.per_folder_sort) {
+            if (rcmail.env.per_folder_sort[folder]) {
+                folder_sort = rcmail.env.per_folder_sort[folder];
+            } else if (rcmail.env.per_folder_sort['default']) {
+                folder_sort = rcmail.env.per_folder_sort['default'];
+            } else {
+                folder_sort = col + '_' + order;
+            }
+
+            var y = folder_sort.split("_", 2);
+            col   = y[0];
+            order = y[1];
+            rcmail.env.sort_col = col;
+            rcmail.env.sort_order = order;
+        }
+        console.log('beforelist after folder: ' + folder + ', col: ' + col + ', order: ' + order);
+    }
 });
 
 rcmail.addEventListener('beforesort', function(col) {
