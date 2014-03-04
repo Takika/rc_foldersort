@@ -68,13 +68,11 @@ rcmail.addEventListener('init', function() {
 });
 
 rcmail.addEventListener('beforelist', function(response) {
-    console.log(response);
-    console.log('beforelist resp: task: ' + response.task + ', action: ' + response.action);
+    console.log('beforelist response: ' + response);
 });
 
 rcmail.addEventListener('beforesort', function(response) {
-    console.log(response);
-    console.log('beforesort resp: task: ' + response.task + ', action: ' + response.action);
+    console.log('beforesort response: ' + response);
 });
 
 rcmail.addEventListener('responsebefore', function(resp) {
