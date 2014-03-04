@@ -126,6 +126,8 @@ if (window.rcmail) {
         if (rcmail.task == 'mail') {
             mbox  = rcmail.env.mailbox;
             order = rcmail.env.sort_order=='ASC' ? 'DESC' : 'ASC';
+            rcmail.env.sort_col = col;
+            rcmail.env.sort_order = order;
             http_lock = rcmail.set_busy(true, 'rc_foldersort.savingdata');
             var data = {
                 cmd: 'save_order',
@@ -133,7 +135,8 @@ if (window.rcmail) {
                 col: rcmail.env.sort_col,
                 order: rcmail.env.sort_order
             };
-            console.log('beforesort data: ' + data);
+            console.log('beforesort data: ');
+            console.log(data);
             rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
         }
 
