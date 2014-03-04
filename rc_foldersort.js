@@ -1,3 +1,4 @@
+/*
 function sort_list(props)
 {
     var folder_sort;
@@ -66,36 +67,41 @@ rcmail.addEventListener('init', function() {
 	rcmail.register_command('plugin.rc_foldersort.sort_header', 'sort_header');
 	rcmail.enable_command('plugin.rc_foldersort.sort_header', true);
 });
+*/
 
-rcmail.addEventListener('beforelist', function(folder) {
-    if (folder && rcmail.task == 'mail') {
-        var folder_sort;
-        orig_col = rcmail.env.sort_col;
-        orig_order = rcmail.env.sort_order;
-        console.log('beforelist before folder: ' + folder + ', col: ' + orig_col + ', order: ' + orig_order);
-
-        if (rcmail.env.per_folder_sort) {
-            if (rcmail.env.per_folder_sort[folder]) {
-                folder_sort = rcmail.env.per_folder_sort[folder];
-            } else if (rcmail.env.per_folder_sort['default']) {
-                folder_sort = rcmail.env.per_folder_sort['default'];
-            } else {
-                folder_sort = orig_col + '_' + orig_order;
-            }
-
-            var y = folder_sort.split("_", 2);
-            col   = y[0];
-            order = y[1];
-            if (orig_col != col || orig_order != order) {
-                rcmail.env.sort_col = col;
-                rcmail.env.sort_order = order;
-                rcmail.list_mailbox(folder, '', folder_sort);
-                console.log('beforelist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
+if (rcmail.window) {
+    rcmail.addEventListener('beforelist', function(folder) {
+        if (folder && rcmail.task == 'mail') {
+            var folder_sort;
+            orig_col = rcmail.env.sort_col;
+            orig_order = rcmail.env.sort_order;
+            console.log('beforelist');
+            console.log(folder);
+            console.log('beforelist before folder: ' + folder + ', col: ' + orig_col + ', order: ' + orig_order);
+    
+            if (rcmail.env.per_folder_sort) {
+                if (rcmail.env.per_folder_sort[folder]) {
+                    folder_sort = rcmail.env.per_folder_sort[folder];
+                } else if (rcmail.env.per_folder_sort['default']) {
+                    folder_sort = rcmail.env.per_folder_sort['default'];
+                } else {
+                    folder_sort = orig_col + '_' + orig_order;
+                }
+    
+                var y = folder_sort.split("_", 2);
+                col   = y[0];
+                order = y[1];
+                if (orig_col != col || orig_order != order) {
+                    rcmail.env.sort_col = col;
+                    rcmail.env.sort_order = order;
+                    rcmail.list_mailbox(folder, '', folder_sort);
+                    console.log('beforelist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
+                }
             }
         }
-    }
-});
-
+    });
+}
+/*
 rcmail.addEventListener('beforesort', function(col) {
     console.log('beforesort col: ' + col);
 });
@@ -109,8 +115,9 @@ rcmail.addEventListener('responsebefore', function(resp) {
     if (rcmail.task == 'mail' && response.action == 'list') {
         console.log('responsebefore list folder: ' + response.env.mailbox + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
     }
-    /*
-    console.log(response);
-    console.log('responsebefore resp: task: ' + rcmail.task + ', action: ' + response.action);
-    */
+    
+    // console.log(response);
+    // console.log('responsebefore resp: task: ' + rcmail.task + ', action: ' + response.action);
+    
 });
+*/
