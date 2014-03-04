@@ -70,18 +70,18 @@ rcmail.addEventListener('init', function() {
 */
 
 if (window.rcmail) {
-    rcmail.addEventListener('beforelist', function(folder) {
-        if (folder && rcmail.task == 'mail') {
+    rcmail.addEventListener('beforelist', function(props) {
+        if (props && rcmail.task == 'mail') {
             var folder_sort;
             orig_col = rcmail.env.sort_col;
             orig_order = rcmail.env.sort_order;
             console.log('beforelist');
-            console.log(folder);
-            console.log('beforelist before folder: ' + folder + ', col: ' + orig_col + ', order: ' + orig_order);
+            console.log(props);
+            console.log('beforelist before folder: ' + props + ', col: ' + orig_col + ', order: ' + orig_order);
     
             if (rcmail.env.per_folder_sort) {
-                if (rcmail.env.per_folder_sort[folder]) {
-                    folder_sort = rcmail.env.per_folder_sort[folder];
+                if (rcmail.env.per_folder_sort[props]) {
+                    folder_sort = rcmail.env.per_folder_sort[props];
                 } else if (rcmail.env.per_folder_sort['default']) {
                     folder_sort = rcmail.env.per_folder_sort['default'];
                 } else {
@@ -94,8 +94,8 @@ if (window.rcmail) {
                 if (orig_col != col || orig_order != order) {
                     rcmail.env.sort_col = col;
                     rcmail.env.sort_order = order;
-                    rcmail.list_mailbox(folder, '', folder_sort);
-                    console.log('beforelist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
+                    rcmail.list_mailbox(props, '', folder_sort);
+                    console.log('beforelist changed folder: ' + props + ', col: ' + col + ', order: ' + order);
                 }
             }
         }
