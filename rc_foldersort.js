@@ -68,6 +68,7 @@ rcmail.addEventListener('init', function() {
 });
 
 rcmail.addEventListener('responsebefore', function(resp) {
-    console.log(resp);
-    console.log('responsebefore resp: task: ' + resp.task + ', action: ' + resp.action);
+    response = resp.response;
+    console.log(response);
+    console.log('responsebefore resp: task: ' + response.task + ', action: ' + response.action);
 });
