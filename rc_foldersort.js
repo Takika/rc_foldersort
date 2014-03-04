@@ -70,6 +70,11 @@ rcmail.addEventListener('init', function() {
 */
 
 if (window.rcmail) {
+    rcmail.addEventListener('before', function(props) {
+        console.log('before Listener');
+        console.log(props);
+    });
+
     rcmail.addEventListener('beforelist', function(props) {
         if (props && rcmail.task == 'mail') {
             var folder_sort;
