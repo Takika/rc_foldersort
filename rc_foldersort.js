@@ -106,6 +106,7 @@ if (window.rcmail) {
         }
     });
 }
+
 /*
 rcmail.addEventListener('beforesort', function(col) {
     console.log('beforesort col: ' + col);
@@ -114,15 +115,19 @@ rcmail.addEventListener('beforesort', function(col) {
 rcmail.addEventListener('listupdate', function(props) {
     console.log('listupdate folder: ' + props.folder + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
 });
+*/
 
 rcmail.addEventListener('responsebefore', function(resp) {
+    console.log('responsebefore Listener');
+    console.log(resp);
+    /*
     response = resp.response;
     if (rcmail.task == 'mail' && response.action == 'list') {
         console.log('responsebefore list folder: ' + response.env.mailbox + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
     }
+    */
     
     // console.log(response);
     // console.log('responsebefore resp: task: ' + rcmail.task + ', action: ' + response.action);
     
 });
-*/
