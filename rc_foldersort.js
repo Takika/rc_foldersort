@@ -67,12 +67,17 @@ rcmail.addEventListener('init', function() {
 	rcmail.enable_command('plugin.rc_foldersort.sort_header', true);
 });
 
-rcmail.addEventListener('beforelist', function(response) {
-    console.log('beforelist response: ' + response);
+rcmail.addEventListener('beforelist', function(folder) {
+    console.log('beforelist folder: ' + folder);
 });
 
-rcmail.addEventListener('beforesort', function(response) {
-    console.log('beforesort response: ' + response);
+rcmail.addEventListener('beforesort', function(col) {
+    console.log('beforesort col: ' + col);
+});
+
+rcmail.addEventListener('listupdate', function(props) {
+    console.log('listupdate');
+    console.log(props);
 });
 
 rcmail.addEventListener('responsebefore', function(resp) {
