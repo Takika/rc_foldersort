@@ -118,8 +118,8 @@ if (window.rcmail) {
                         $('#rcm' + col).addClass('sorted' + order);
                         rcmail.env.sort_col   = col;
                         rcmail.env.sort_order = order;
-                        // rcmail.list_mailbox(props, '', folder_sort);
                         console.log('beforelist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
+                        rcmail.list_mailbox(folder, '', folder_sort);
                     }
                 }
             }
@@ -164,22 +164,17 @@ if (window.rcmail) {
     rcmail.addEventListener('aftersort', function(prop) {
         console.log('aftersort prop: ' + col);
 
-        /*
         if (rcmail.task == 'mail') {
             mbox  = rcmail.env.mailbox;
-            order = rcmail.env.sort_order == 'ASC' ? 'DESC' : 'ASC';
-
-            rcmail.env.sort_col   = col;
-            rcmail.env.sort_order = order;
 
             http_lock = rcmail.set_busy(true, 'rc_foldersort.savingdata');
             var data  = {
                 cmd: 'save_order',
                 folder: mbox,
-                col: col,
+                col: rcmail.env.sort_col,
                 order: rcmail.env.sort_order
             };
-            console.log('beforesort data: ');
+            console.log('aftersort data: ');
             console.log(data);
             rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
         }
