@@ -74,10 +74,12 @@ if (window.rcmail) {
     /* 
      * EventListener to debug all action before events
      */
+    /*
     rcmail.addEventListener('actionbefore', function(props) {
         console.log('before Listener');
         console.log(props);
     });
+    */
 
     /*
      * EventListener to change the sorting order before we list the messages
@@ -131,6 +133,7 @@ if (window.rcmail) {
                 col: rcmail.env.sort_col,
                 order: rcmail.env.sort_order
             };
+            console.log('beforesort data: ' + data);
             rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
         }
 
