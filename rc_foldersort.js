@@ -104,9 +104,10 @@ if (window.rcmail) {
                 col   = y[0];
                 order = y[1];
                 if (orig_col != col || orig_order != order) {
+                    $('#rcm'+orig_col).removeClass('sorted'+(orig_order.toUpperCase()));
+                    $('#rcm'+col).addClass('sorted'+order);
                     rcmail.env.sort_col = col;
                     rcmail.env.sort_order = order;
-                    rcmail.set_list_sorting(col, order);
                     // rcmail.list_mailbox(props, '', folder_sort);
                     console.log('beforelist changed folder: ' + props + ', col: ' + col + ', order: ' + order);
                 }
@@ -123,7 +124,6 @@ if (window.rcmail) {
         if (rcmail.task == 'mail') {
             mbox  = rcmail.env.mailbox;
             order = rcmail.env.sort_order=='ASC' ? 'DESC' : 'ASC';
-            rcmail.set_list_sorting(col, order);
             http_lock = rcmail.set_busy(true, 'rc_foldersort.savingdata');
             var data = {
                 cmd: 'save_order',
