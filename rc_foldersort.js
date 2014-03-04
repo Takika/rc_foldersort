@@ -94,7 +94,7 @@ if (window.rcmail) {
                 if (orig_col != col || orig_order != order) {
                     rcmail.env.sort_col = col;
                     rcmail.env.sort_order = order;
-                    rcmail.list_mailbox(props, '', folder_sort);
+                    // rcmail.list_mailbox(props, '', folder_sort);
                     console.log('beforelist changed folder: ' + props + ', col: ' + col + ', order: ' + order);
                 }
             }
