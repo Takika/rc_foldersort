@@ -69,7 +69,7 @@ rcmail.addEventListener('init', function() {
 });
 */
 
-if (rcmail.window) {
+if (window.rcmail) {
     rcmail.addEventListener('beforelist', function(folder) {
         if (folder && rcmail.task == 'mail') {
             var folder_sort;
