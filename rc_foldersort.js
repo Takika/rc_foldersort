@@ -70,7 +70,7 @@ rcmail.addEventListener('init', function() {
 */
 
 if (window.rcmail) {
-    rcmail.addEventListener('before', function(props) {
+    rcmail.addEventListener('actionbefore', function(props) {
         console.log('before Listener');
         console.log(props);
     });
