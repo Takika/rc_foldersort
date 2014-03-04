@@ -197,8 +197,10 @@ class rc_foldersort extends rcube_plugin
 
     public function render_page_hook($args)
     {
+        /*
         $args['content'] = preg_replace('|onclick="return rcmail.command\(\'list\'|', 'onclick="return rcmail.command(\'plugin.rc_foldersort.sort_list\'', $args['content']);
         $args['content'] = preg_replace('|onclick="return rcmail.command\(\'sort\'|', 'onclick="return rcmail.command(\'plugin.rc_foldersort.sort_header\'', $args['content']);
+        */
 
         return $args;
     }

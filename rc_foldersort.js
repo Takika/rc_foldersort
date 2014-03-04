@@ -67,6 +67,16 @@ rcmail.addEventListener('init', function() {
 	rcmail.enable_command('plugin.rc_foldersort.sort_header', true);
 });
 
+rcmail.addEventListener('beforelist', function(response) {
+    console.log(response);
+    console.log('beforelist resp: task: ' + response.task + ', action: ' + response.action);
+});
+
+rcmail.addEventListener('beforesort', function(response) {
+    console.log(response);
+    console.log('beforesort resp: task: ' + response.task + ', action: ' + response.action);
+});
+
 rcmail.addEventListener('responsebefore', function(resp) {
     response = resp.response;
     console.log(response);
