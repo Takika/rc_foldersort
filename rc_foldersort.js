@@ -1,5 +1,4 @@
-/*
-function sort_list(props)
+/* function sort_list(props)
 {
     var folder_sort;
     col = rcmail.env.sort_col;
@@ -30,8 +29,9 @@ function sort_list(props)
         rcmail.set_button_titles();
     }
 }
+*/
 
-function sort_header(props)
+/* function sort_header(props)
 {
     col = props;
     mbox = rcmail.env.mailbox;
@@ -56,8 +56,9 @@ function sort_header(props)
         rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
     }
 }
+*/
 
-rcmail.addEventListener('init', function() {
+/* rcmail.addEventListener('init', function() {
 	// Handle folderlist click
 	rcmail.register_command('plugin.rc_foldersort.sort_list', 'sort_list');
 	rcmail.enable_command('plugin.rc_foldersort.sort_list', true);
@@ -70,11 +71,17 @@ rcmail.addEventListener('init', function() {
 */
 
 if (window.rcmail) {
+    /* 
+     * EventListener to debug all action before events
+     */
     rcmail.addEventListener('actionbefore', function(props) {
         console.log('before Listener');
         console.log(props);
     });
 
+    /*
+     * EventListener to change the sorting order before we list the messages
+     */
     rcmail.addEventListener('beforelist', function(props) {
         if (props && rcmail.task == 'mail') {
             var folder_sort;
@@ -105,29 +112,39 @@ if (window.rcmail) {
             }
         }
     });
-}
 
-/*
-rcmail.addEventListener('beforesort', function(col) {
-    console.log('beforesort col: ' + col);
-});
-
-rcmail.addEventListener('listupdate', function(props) {
-    console.log('listupdate folder: ' + props.folder + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
-});
-*/
-
-rcmail.addEventListener('responsebefore', function(resp) {
-    console.log('responsebefore Listener');
-    console.log(resp);
     /*
-    response = resp.response;
-    if (rcmail.task == 'mail' && response.action == 'list') {
-        console.log('responsebefore list folder: ' + response.env.mailbox + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
-    }
-    */
-    
-    // console.log(response);
-    // console.log('responsebefore resp: task: ' + rcmail.task + ', action: ' + response.action);
-    
-});
+     * EventListener to handle the header sort clicks
+     */
+    rcmail.addEventListener('beforesort', function(col) {
+        console.log('beforesort col: ' + col);
+
+        if (rcmail.task == 'mail') {
+            mbox  = rcmail.env.mailbox;
+            order = rcmail.env.sort_order=='ASC' ? 'DESC' : 'ASC';
+            http_lock = rcmail.set_busy(true, 'rc_foldersort.savingdata');
+            var data = {
+                cmd: 'save_order',
+                folder: mbox,
+                col: rcmail.env.sort_col,
+                order: rcmail.env.sort_order
+            };
+            rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
+        }
+    });
+
+    /*
+     * EventListener to debug the list http_response reply
+     */
+    rcmail.addEventListener('responsebeforelist', function(resp) {
+        response = resp.response;
+        if (rcmail.task == 'mail') {
+            console.log('responsebefore list folder: ' + response.env.mailbox + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
+        }
+        
+        // console.log(response);
+        // console.log('responsebefore resp: task: ' + rcmail.task + ', action: ' + response.action);
+        
+    });
+
+}
