@@ -1,5 +1,13 @@
 if (window.rcmail) {
     /*
+     *
+     */
+    rcmail.addEventListener('requestlist', function(props) {
+        console.log('requestlist');
+        console.log(props);
+    });
+
+    /*
      * EventListener to change the sorting order before we list the messages
      */
     rcmail.addEventListener('beforelist', function(props) {
@@ -50,6 +58,7 @@ if (window.rcmail) {
                 }
             }
         }
+        return props;
     });
 
     /*
