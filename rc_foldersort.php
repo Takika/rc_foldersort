@@ -185,13 +185,19 @@ class rc_foldersort extends rcube_plugin
         $col    = get_input_value('col', RCUBE_INPUT_POST);
         $order  = get_input_value('order', RCUBE_INPUT_POST);
 
-        if ($cmd == 'save_order') {
-            $sort_order          = $this->sort_order;
-            $sort_order[$folder] = $col . "_" . $order;
-            $this->sort_order    = $sort_order;
+        switch ($cmd) {
+            case 'save_order': {
+                $sort_order          = $this->sort_order;
+                $sort_order[$folder] = $col . "_" . $order;
+                $this->sort_order    = $sort_order;
 
-            $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
-            $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+                $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
+                $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+            }
+            case 'change_session': {
+                $_SESSION['sort_col']   = $col;
+                $_SESSION['sort_order'] = $order;
+            }
         }
     }
 
