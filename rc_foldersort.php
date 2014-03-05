@@ -193,10 +193,12 @@ class rc_foldersort extends rcube_plugin
 
                 $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
                 $this->rc->output->set_env('per_folder_sort', $this->sort_order);
+                break;
             }
             case 'change_session': {
                 $_SESSION['sort_col']   = $col;
                 $_SESSION['sort_order'] = $order;
+                break;
             }
         }
     }
