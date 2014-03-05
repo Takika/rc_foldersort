@@ -1,27 +1,17 @@
 if (window.rcmail) {
     /*
-     * EventListener to debug all action before events
-     */
-    /*
-    rcmail.addEventListener('actionbefore', function(props) {
-        console.log('before Listener');
-        console.log(props);
-    });
-    */
-
-    /*
      * EventListener to change the sorting order before we list the messages
      */
     rcmail.addEventListener('beforelist', function(props) {
         var folder = rcmail.env.mailbox;
         if (props) {
-            if (typeof(props) == 'object' && props.ref == 'rcmail') {
-                folder = props.env.mailbox;
-            } else if (typeof(props) == 'string') {
-                folder = props;
-            }
-
             if (rcmail.task == 'mail') {
+                if (typeof(props) == 'object' && props.ref == 'rcmail') {
+                    folder = props.env.mailbox;
+                } else if (typeof(props) == 'string') {
+                    folder = props;
+                }
+
                 var folder_sort;
                 orig_col   = rcmail.env.sort_col;
                 orig_order = rcmail.env.sort_order;
@@ -46,8 +36,16 @@ if (window.rcmail) {
                         $('#rcm' + col).addClass('sorted' + order);
                         rcmail.env.sort_col   = col;
                         rcmail.env.sort_order = order;
+                        http_lock = rcmail.set_busy(true, 'rc_foldersort.savingsession');
+                        var data = {
+                            cmd: 'change_session',
+                            folder: folder,
+                            col: col,
+                            order: order
+                        };
+                        rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
                         console.log('beforelist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
-                        rcmail.list_mailbox(folder, '', folder_sort);
+                        // rcmail.list_mailbox(folder, '', folder_sort);
                     }
                 }
             }
