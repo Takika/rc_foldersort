@@ -1,11 +1,8 @@
 if (window.rcmail) {
     /*
-     *
+     * EventListener to add the sort order to the request
      */
     rcmail.addEventListener('requestlist', function(props) {
-        console.log('requestlist');
-        console.log(props);
-
         if (rcmail.task == 'mail') {
             var folder_sort = '';
             var folder      = props._mbox;
@@ -43,7 +40,6 @@ if (window.rcmail) {
                 order: order
             };
             rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
-            console.log('requestlist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
             props._sort = folder_sort;
         }
 
@@ -66,9 +62,6 @@ if (window.rcmail) {
                 var folder_sort;
                 orig_col   = rcmail.env.sort_col;
                 orig_order = rcmail.env.sort_order;
-                console.log('beforelist');
-                console.log(folder);
-                console.log('beforelist before folder: ' + folder + ', col: ' + orig_col + ', order: ' + orig_order);
 
                 if (rcmail.env.per_folder_sort) {
                     if (rcmail.env.per_folder_sort[folder]) {
@@ -96,7 +89,6 @@ if (window.rcmail) {
                             order: order
                         };
                         rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
-                        console.log('beforelist changed folder: ' + folder + ', col: ' + col + ', order: ' + order);
                     }
                 }
             }
@@ -106,13 +98,7 @@ if (window.rcmail) {
     /*
      * EventListener to handle the header sort clicks
      */
-    rcmail.addEventListener('beforesort', function(prop) {
-        console.log('beforesort prop: ' + prop);
-    });
-
     rcmail.addEventListener('aftersort', function(prop) {
-        console.log('aftersort prop: ' + prop);
-
         if (rcmail.task == 'mail') {
             mbox = rcmail.env.mailbox;
 
@@ -123,23 +109,7 @@ if (window.rcmail) {
                 col: rcmail.env.sort_col,
                 order: rcmail.env.sort_order
             };
-            console.log('aftersort data: ');
-            console.log(data);
             rcmail.http_post('plugin.rc_foldersort_json', data, http_lock);
         }
-    });
-
-    /*
-     * EventListener to debug the list http_response reply
-     */
-    rcmail.addEventListener('responsebeforelist', function(resp) {
-        response = resp.response;
-        if (rcmail.task == 'mail') {
-            console.log('responsebefore list folder: ' + response.env.mailbox + ', col: ' + rcmail.env.sort_col + ', order: ' + rcmail.env.sort_order);
-        }
-
-        // console.log(response);
-        // console.log('responsebefore resp: task: ' + rcmail.task + ', action: ' + response.action);
-
     });
 }
