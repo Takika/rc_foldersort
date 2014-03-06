@@ -186,6 +186,10 @@ class rc_foldersort extends rcube_plugin
         $order  = get_input_value('order', RCUBE_INPUT_POST);
 
         switch ($cmd) {
+            case 'change_session': {
+                $_SESSION['sort_col']   = $col;
+                $_SESSION['sort_order'] = $order;
+            }
             case 'save_order': {
                 $sort_order          = $this->sort_order;
                 $sort_order[$folder] = $col . "_" . $order;
@@ -193,11 +197,6 @@ class rc_foldersort extends rcube_plugin
 
                 $this->rc->user->save_prefs(array('per_folder_sort' => $this->sort_order));
                 $this->rc->output->set_env('per_folder_sort', $this->sort_order);
-                break;
-            }
-            case 'change_session': {
-                $_SESSION['sort_col']   = $col;
-                $_SESSION['sort_order'] = $order;
                 break;
             }
         }
