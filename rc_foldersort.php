@@ -10,7 +10,7 @@ class rc_foldersort extends rcube_plugin
     private $sort_order;
 
     private $uname;
-    private $debug;
+    private $debug = false;
 
     public function init()
     {
