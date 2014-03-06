@@ -95,8 +95,12 @@ if (window.rcmail) {
     /*
      * EventListener to handle the header sort clicks
      */
+    rcmail.addEventListener('beforesort', function(prop) {
+        console.log('beforesort prop: ' + prop);
+    });
+
     rcmail.addEventListener('aftersort', function(prop) {
-        console.log('aftersort prop: ' + col);
+        console.log('aftersort prop: ' + prop);
 
         if (rcmail.task == 'mail') {
             mbox = rcmail.env.mailbox;
