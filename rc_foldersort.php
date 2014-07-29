@@ -30,7 +30,6 @@ class rc_foldersort extends rcube_plugin
         if ($this->rc->task == 'mail') {
             $this->include_script('rc_foldersort.js');
             $this->register_action('plugin.rc_foldersort_json', array($this, 'sort_json_action'));
-            $this->add_hook('render_page', array($this, 'render_page_hook'));
         }
     }
 
@@ -200,16 +199,6 @@ class rc_foldersort extends rcube_plugin
                 break;
             }
         }
-    }
-
-    public function render_page_hook($args)
-    {
-        /*
-        $args['content'] = preg_replace('|onclick="return rcmail.command\(\'list\'|', 'onclick="return rcmail.command(\'plugin.rc_foldersort.sort_list\'', $args['content']);
-        $args['content'] = preg_replace('|onclick="return rcmail.command\(\'sort\'|', 'onclick="return rcmail.command(\'plugin.rc_foldersort.sort_header\'', $args['content']);
-        */
-
-        return $args;
     }
 
     private function _debug($value, $key = '', $force = false)
