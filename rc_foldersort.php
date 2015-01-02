@@ -133,7 +133,7 @@ class rc_foldersort extends rcube_plugin
             );
 
             $folder_sorts = $this->sort_order;
-            if (array_key_exists('default', $folder_sorts)) {
+            if (!empty($folder_sorts) && is_array($folder_sorts) && array_key_exists('default', $folder_sorts)) {
                 $folder_sort = $folder_sorts['default'];
             } else {
                 $folder_sort = 'date_DESC';
