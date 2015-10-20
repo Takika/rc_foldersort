@@ -72,11 +72,11 @@ class rc_foldersort extends rcube_plugin
         if (is_array($content) && !array_key_exists('_sortcol', $content)) {
             $folder_sort_col_select = new html_select(array('name' => '_sortcol', 'id' => '_sortcol'));
             foreach ($cols as $temp_col) {
-                $folder_sort_col_select->add(rcmail::get_instance()->gettext($temp_col), $temp_col);
+                $folder_sort_col_select->add($this->gettext($temp_col), $temp_col);
             }
 
             $content['_sortcol'] = array(
-                'label' => rcmail::get_instance()->gettext('listsorting'),
+                'label' => $this->gettext('listsorting'),
                 'value' => $folder_sort_col_select->show($col),
             );
         }
@@ -87,10 +87,10 @@ class rc_foldersort extends rcube_plugin
 
         if (is_array($content) && !array_key_exists('_sortord', $content)) {
             $folder_sort_order_select = new html_select(array('name' => '_sortord', 'id' => '_sortord'));
-            $folder_sort_order_select->add(rcmail::get_instance()->gettext('asc'), 'ASC');
-            $folder_sort_order_select->add(rcmail::get_instance()->gettext('desc'), 'DESC');
+            $folder_sort_order_select->add($this->gettext('asc'), 'ASC');
+            $folder_sort_order_select->add($this->gettext('desc'), 'DESC');
             $content['_sortord'] = array(
-                'label' => rcmail::get_instance()->gettext('listorder'),
+                'label' => $this->gettext('listorder'),
                 'value' => $folder_sort_order_select->show($order),
             );
         }
@@ -150,14 +150,14 @@ class rc_foldersort extends rcube_plugin
 
             $sort_select_col = new html_select(array('name' => '_default_sort_col', 'id' => '_default_sort_col'));
             foreach ($cols as $temp_col) {
-                $sort_select_col->add(rcmail::get_instance()->gettext($temp_col), $temp_col);
+                $sort_select_col->add($this->gettext($temp_col), $temp_col);
             }
 
             $sort_select_order = new html_select(array('name' => '_default_sort_order', 'id' => '_default_sort_order'));
-            $sort_select_order->add(rcmail::get_instance()->gettext('asc'), 'ASC');
-            $sort_select_order->add(rcmail::get_instance()->gettext('desc'), 'DESC');
+            $sort_select_order->add($this->gettext('asc'), 'ASC');
+            $sort_select_order->add($this->gettext('desc'), 'DESC');
             $sort_options = array(
-                'title' => rcmail::get_instance()->gettext('listorder'),
+                'title' => $this->gettext('listorder'),
                 'content' => $sort_select_col->show($col) . $sort_select_order->show($order),
             );
 
