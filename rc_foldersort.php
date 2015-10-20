@@ -72,11 +72,11 @@ class rc_foldersort extends rcube_plugin
         if (is_array($content) && !array_key_exists('_sortcol', $content)) {
             $folder_sort_col_select = new html_select(array('name' => '_sortcol', 'id' => '_sortcol'));
             foreach ($cols as $temp_col) {
-                $folder_sort_col_select->add(rcube_label($temp_col), $temp_col);
+                $folder_sort_col_select->add(rcmail::get_instance()->gettext($temp_col), $temp_col);
             }
 
             $content['_sortcol'] = array(
-                'label' => rcube_label('listsorting'),
+                'label' => rcmail::get_instance()->gettext('listsorting'),
                 'value' => $folder_sort_col_select->show($col),
             );
         }
@@ -87,10 +87,10 @@ class rc_foldersort extends rcube_plugin
 
         if (is_array($content) && !array_key_exists('_sortord', $content)) {
             $folder_sort_order_select = new html_select(array('name' => '_sortord', 'id' => '_sortord'));
-            $folder_sort_order_select->add(rcube_label('asc'), 'ASC');
-            $folder_sort_order_select->add(rcube_label('desc'), 'DESC');
+            $folder_sort_order_select->add(rcmail::get_instance()->gettext('asc'), 'ASC');
+            $folder_sort_order_select->add(rcmail::get_instance()->gettext('desc'), 'DESC');
             $content['_sortord'] = array(
-                'label' => rcube_label('listorder'),
+                'label' => rcmail::get_instance()->gettext('listorder'),
                 'value' => $folder_sort_order_select->show($order),
             );
         }
@@ -150,14 +150,14 @@ class rc_foldersort extends rcube_plugin
 
             $sort_select_col = new html_select(array('name' => '_default_sort_col', 'id' => '_default_sort_col'));
             foreach ($cols as $temp_col) {
-                $sort_select_col->add(rcube_label($temp_col), $temp_col);
+                $sort_select_col->add(rcmail::get_instance()->gettext($temp_col), $temp_col);
             }
 
             $sort_select_order = new html_select(array('name' => '_default_sort_order', 'id' => '_default_sort_order'));
-            $sort_select_order->add(rcube_label('asc'), 'ASC');
-            $sort_select_order->add(rcube_label('desc'), 'DESC');
+            $sort_select_order->add(rcmail::get_instance()->gettext('asc'), 'ASC');
+            $sort_select_order->add(rcmail::get_instance()->gettext('desc'), 'DESC');
             $sort_options = array(
-                'title' => rcube_label('listorder'),
+                'title' => rcmail::get_instance()->gettext('listorder'),
                 'content' => $sort_select_col->show($col) . $sort_select_order->show($order),
             );
 
@@ -170,8 +170,8 @@ class rc_foldersort extends rcube_plugin
     public function preferences_save_hook($args)
     {
         if ($args['section'] == 'mailbox') {
-            $folder_sort_col                  = get_input_value('_default_sort_col', RCUBE_INPUT_POST);
-            $folder_sort_order                = get_input_value('_default_sort_order', RCUBE_INPUT_POST);
+            $folder_sort_col                  = rcube_utils::get_input_value('_default_sort_col', rcube_utils::INPUT_POST);
+            $folder_sort_order                = rcube_utils::get_input_value('_default_sort_order', rcube_utils::INPUT_POST);
             $folder_sort                      = $folder_sort_col . '_' . $folder_sort_order;
             $folder_sorts                     = $this->sort_order;
             $folder_sorts['default']          = $folder_sort;
@@ -183,10 +183,10 @@ class rc_foldersort extends rcube_plugin
 
     public function sort_json_action()
     {
-        $cmd    = get_input_value('cmd', RCUBE_INPUT_POST);
-        $folder = get_input_value('folder', RCUBE_INPUT_POST);
-        $col    = get_input_value('col', RCUBE_INPUT_POST);
-        $order  = get_input_value('order', RCUBE_INPUT_POST);
+        $cmd    = rcube_utils::get_input_value('cmd', rcube_utils::INPUT_POST);
+        $folder = rcube_utils::get_input_value('folder', rcube_utils::INPUT_POST);
+        $col    = rcube_utils::get_input_value('col', rcube_utils::INPUT_POST);
+        $order  = rcube_utils::get_input_value('order', rcube_utils::INPUT_POST);
 
         switch ($cmd) {
             case 'change_session': {
@@ -237,7 +237,7 @@ class rc_foldersort extends rcube_plugin
                 $str = sprintf("[%s] %s", $this->uname, $str);
             }
 
-            write_log($this->ID, $str);
+            rcmail::write_log($this->ID, $str);
         }
     }
 
