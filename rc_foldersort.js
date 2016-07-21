@@ -76,7 +76,9 @@ if (window.rcmail) {
                     col   = y[0];
                     order = y[1];
                     if (orig_col != col || orig_order != order) {
-                        $('#rcm' + orig_col).removeClass('sorted' + (orig_order.toUpperCase()));
+                        // $('#rcm' + orig_col).removeClass('sorted' + (orig_order.toUpperCase()));
+                        new_order = orig_order.toUpperCase();
+                        $('#rcm' + orig_col).removeClass("'sorted' + (orig_order.toUpperCase())");
                         $('#rcm' + col).addClass('sorted' + order);
                         rcmail.env.sort_col   = col;
                         rcmail.env.sort_order = order;
